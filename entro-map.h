@@ -14,9 +14,6 @@ struct entro_map_s {
   char ***values;
   unsigned long position[2];
   unsigned long count;
-
-
-  unsigned long capacity;
 };
 
 struct entro_map_s *entro_map_initialize();
