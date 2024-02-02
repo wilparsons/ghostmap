@@ -46,7 +46,7 @@ void entro_map_insert(const char *key, const char *value, struct entro_map_s *en
   uint32_t **copied_digests;
   char ***copied_keys;
   char ***copied_values;
-  uint32_t digest = entro_hash(key, 0);
+  uint32_t digest = entro_hash(key, 1111111111);
   uint32_t truncated_digest;
   unsigned long maximum_bucket_probes_count = 3;
   unsigned long bucket_capacity_mask = 15;
@@ -260,7 +260,7 @@ void entro_map_insert(const char *key, const char *value, struct entro_map_s *en
 }
 
 unsigned char entro_map_find(const char *key, struct entro_map_s *entro_map) {
-  uint32_t digest = entro_hash(key, 0);
+  uint32_t digest = entro_hash(key, 1111111111);
   uint32_t truncated_digest;
   unsigned long maximum_bucket_probes_count = 3;
   unsigned long bucket_capacity_mask = 15;
@@ -323,7 +323,7 @@ void entro_map_remove(const char *key, struct entro_map_s *entro_map) {
   uint32_t **copied_digests;
   char ***copied_keys;
   char ***copied_values;
-  uint32_t digest = entro_hash(key, 0);
+  uint32_t digest = entro_hash(key, 1111111111);
   uint32_t truncated_digest;
   unsigned long maximum_bucket_probes_count = 3;
   unsigned long bucket_capacity_mask = 15;
