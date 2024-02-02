@@ -12,6 +12,7 @@ uint32_t entro_hash(const char *input, uint32_t entropy) {
     entropy += (entropy + 111111111) << 9;
     entropy += entropy << 3;
     entropy += (~entropy + entropy) << 1;
+    entropy += (entropy << 10);
     i++;
   }
 
