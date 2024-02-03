@@ -48,13 +48,13 @@ void entro_map_insert(const char *key, const char *value, struct entro_map_s *en
   char ***copied_values;
   uint32_t digest = entro_hash(key, 1111111111);
   uint32_t truncated_digest;
-  unsigned long maximum_bucket_probes_count = 3;
-  unsigned long bucket_capacity_mask = 15;
+  unsigned char maximum_bucket_probes_count = 3;
+  uint32_t bucket_capacity_mask = 15;
   unsigned long i;
   unsigned long j;
   unsigned long k;
-  unsigned char is_insertable = 0;
-  unsigned char is_duplicate = 0;
+  char is_insertable = 0;
+  char is_duplicate = 0;
 
   while (digest < 2) {
     digest++;
@@ -157,8 +157,10 @@ void entro_map_insert(const char *key, const char *value, struct entro_map_s *en
       ) {
         is_insertable = 1;
       } else {
-        // todo: bucket_capacity_mask should have a 32-bit limit
-        maximum_bucket_probes_count += 3;
+        if (maximum_bucket_probes_count != 87) {
+          maximum_bucket_probes_count += 3;
+        }
+
         bucket_capacity_mask = (bucket_capacity_mask << 1) + 1;
         i++;
       }
@@ -262,8 +264,8 @@ void entro_map_insert(const char *key, const char *value, struct entro_map_s *en
 unsigned char entro_map_find(const char *key, struct entro_map_s *entro_map) {
   uint32_t digest = entro_hash(key, 1111111111);
   uint32_t truncated_digest;
-  unsigned long maximum_bucket_probes_count = 3;
-  unsigned long bucket_capacity_mask = 15;
+  unsigned char maximum_bucket_probes_count = 3;
+  uint32_t bucket_capacity_mask = 15;
   unsigned long i;
   unsigned long j;
   unsigned long k;
@@ -310,7 +312,10 @@ unsigned char entro_map_find(const char *key, struct entro_map_s *entro_map) {
     }
 
     if (is_found == 0) {
-      maximum_bucket_probes_count += 3;
+      if (maximum_bucket_probes_count != 87) {
+        maximum_bucket_probes_count += 3;
+      }
+
       bucket_capacity_mask = (bucket_capacity_mask << 1) + 1;
       i++;
     }
@@ -325,13 +330,13 @@ void entro_map_remove(const char *key, struct entro_map_s *entro_map) {
   char ***copied_values;
   uint32_t digest = entro_hash(key, 1111111111);
   uint32_t truncated_digest;
-  unsigned long maximum_bucket_probes_count = 3;
-  unsigned long bucket_capacity_mask = 15;
+  unsigned char maximum_bucket_probes_count = 3;
+  uint32_t bucket_capacity_mask = 15;
   unsigned long i;
   unsigned long j;
   unsigned long k;
-  unsigned char is_removed = 0;
-  unsigned char is_shrinkable;
+  char is_removed = 0;
+  char is_shrinkable;
 
   while (digest < 2) {
     digest++;
@@ -416,7 +421,10 @@ void entro_map_remove(const char *key, struct entro_map_s *entro_map) {
                       entro_map->values[j][truncated_digest] = entro_map->values[entro_map->_buckets_count - 1][i];
                       j = entro_map->_buckets_count - 1;
                     } else {
-                      maximum_bucket_probes_count += 3;
+                      if (maximum_bucket_probes_count != 87) {
+                        maximum_bucket_probes_count += 3;
+                      }
+
                       bucket_capacity_mask = (bucket_capacity_mask << 1) + 1;
                       j++;
                     }
@@ -493,7 +501,10 @@ void entro_map_remove(const char *key, struct entro_map_s *entro_map) {
     }
 
     if (is_removed == 0) {
-      maximum_bucket_probes_count += 3;
+      if (maximum_bucket_probes_count != 87) {
+        maximum_bucket_probes_count += 3;
+      }
+
       bucket_capacity_mask = (bucket_capacity_mask << 1) + 1;
       i++;
     }
