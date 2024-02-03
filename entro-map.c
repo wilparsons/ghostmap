@@ -532,7 +532,7 @@ void entro_map_destroy(struct entro_map_s *entro_map) {
     free(entro_map->keys[i]);
     free(entro_map->values[i]);
 
-    if (i < 29) {
+    if (i < 28) {
       bucket_capacity_count <<= 1;
     }
 
