@@ -1,4 +1,3 @@
-// #include <stdio.h>
 #include "entro-hash.h"
 #include "entro-map.h"
 
@@ -31,7 +30,6 @@ struct entro_map_s *entro_map_initialize() {
       entro_map->_buckets_count = 1;
       entro_map->_tombstones_count = 0;
       entro_map->count = 0;
-      // entro_map->capacity = 16;
     } else {
       _entro_map_handle_error();
     }
@@ -169,9 +167,6 @@ void entro_map_insert(const char *key, const char *value, struct entro_map_s *en
 
   if (is_duplicate == 0) {
     if (is_insertable == 0) {
-      // printf("probes: %lu\n", maximum_bucket_probes_count);
-      // printf("%lu of %lu (%lu load factor)\n", entro_map->count, entro_map->capacity, (entro_map->count * 100) / entro_map->capacity);
-
       copied_digests = calloc(i + 1, sizeof(uint32_t *));
       copied_keys = calloc(i + 1, sizeof(char **));
       copied_values = calloc(i + 1, sizeof(char **));
@@ -205,11 +200,20 @@ void entro_map_insert(const char *key, const char *value, struct entro_map_s *en
           entro_map->keys[i] != NULL &&
           entro_map->values[i] != NULL
         ) {
+          j = 0;
+
+          while (j != entro_map->_end_bucket_capacity_count) {
+            if (entro_map->_digests[i - 1][j] == 1) {
+              entro_map->_tombstones_count++;
+            }
+
+            j++;
+          }
+
           entro_map->_end_bucket_count = 0;
           entro_map->_end_bucket_capacity_count = bucket_capacity_mask + 1;
           entro_map->_buckets_count++;
           truncated_digest = digest & bucket_capacity_mask;
-          // entro_map->capacity += bucket_capacity_mask + 1;
         } else {
           _entro_map_handle_error();
         }
@@ -249,7 +253,7 @@ void entro_map_insert(const char *key, const char *value, struct entro_map_s *en
 
         entro_map->count++;
 
-        if (i + 1 == entro_map->_buckets_count) {
+        if ((i + 1) == entro_map->_buckets_count) {
           entro_map->_end_bucket_count++;
         }
       } else {
@@ -261,7 +265,7 @@ void entro_map_insert(const char *key, const char *value, struct entro_map_s *en
   }
 }
 
-unsigned char entro_map_find(const char *key, struct entro_map_s *entro_map) {
+char entro_map_find(const char *key, struct entro_map_s *entro_map) {
   uint32_t digest = entro_hash(key, 1111111111);
   uint32_t truncated_digest;
   unsigned char maximum_bucket_probes_count = 3;
@@ -368,7 +372,7 @@ void entro_map_remove(const char *key, struct entro_map_s *entro_map) {
           free(entro_map->values[i][truncated_digest]);
           entro_map->count--;
 
-          if (i + 1 == entro_map->_buckets_count) {
+          if ((i + 1) == entro_map->_buckets_count) {
             entro_map->_end_bucket_count--;
           } else {
             entro_map->_tombstones_count++;
@@ -378,7 +382,7 @@ void entro_map_remove(const char *key, struct entro_map_s *entro_map) {
 
           if (
             entro_map->_buckets_count != 1 &&
-            (entro_map->_end_bucket_count >> 1) + entro_map->_end_bucket_count < entro_map->_tombstones_count
+            ((entro_map->_end_bucket_count >> 1) + entro_map->_end_bucket_count) < entro_map->_tombstones_count
           ) {
             is_shrinkable = 1;
 
@@ -394,7 +398,7 @@ void entro_map_remove(const char *key, struct entro_map_s *entro_map) {
                   bucket_capacity_mask = 15;
                   j = 0;
 
-                  while (j != entro_map->_buckets_count - 1) {
+                  while (j != (entro_map->_buckets_count - 1)) {
                     truncated_digest = digest & bucket_capacity_mask;
                     k = 0;
 
@@ -410,7 +414,7 @@ void entro_map_remove(const char *key, struct entro_map_s *entro_map) {
                       k != maximum_bucket_probes_count &&
                       entro_map->_digests[j][truncated_digest] < 2
                     ) {
-                      entro_map->_digests[entro_map->_buckets_count - 1][i] = 0;
+                      entro_map->_digests[entro_map->_buckets_count - 1][i] = 1;
 
                       if (entro_map->_digests[j][truncated_digest] == 1) {
                         entro_map->_tombstones_count--;
@@ -431,7 +435,7 @@ void entro_map_remove(const char *key, struct entro_map_s *entro_map) {
                   }
                 }
 
-                if (entro_map->_digests[entro_map->_buckets_count - 1][i] != 0) {
+                if (entro_map->_digests[entro_map->_buckets_count - 1][i] > 1) {
                   i = 0;
                   is_shrinkable = 0;
                 }
