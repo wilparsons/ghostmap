@@ -333,7 +333,7 @@ void entro_map_remove(const char *key, struct entro_map_s *entro_map) {
   unsigned char maximum_bucket_probes_count = 3;
   uint32_t bucket_capacity_mask = 15;
   unsigned long i;
-  unsigned char j;
+  unsigned long j;
   unsigned long k;
   char is_removed = 0;
   char is_shrinkable;
@@ -512,14 +512,14 @@ void entro_map_remove(const char *key, struct entro_map_s *entro_map) {
 }
 
 void entro_map_destroy(struct entro_map_s *entro_map) {
-  uint32_t bucket_capacity_mask = 15;
+  unsigned long bucket_capacity_count = 16;
   unsigned long i = 0;
-  uint32_t j;
+  unsigned long j;
 
   while (i != entro_map->_buckets_count) {
     j = 0;
 
-    while (j != bucket_capacity_mask) {
+    while (j != bucket_capacity_count) {
       if (entro_map->_digests[i][j] > 1) {
         free(entro_map->keys[i][j]);
         free(entro_map->values[i][j]);
@@ -528,15 +528,14 @@ void entro_map_destroy(struct entro_map_s *entro_map) {
       j++;
     }
 
-    if (entro_map->_digests[i][j] > 1) {
-      free(entro_map->keys[i][j]);
-      free(entro_map->values[i][j]);
-    }
-
     free(entro_map->_digests[i]);
     free(entro_map->keys[i]);
     free(entro_map->values[i]);
-    bucket_capacity_mask = (bucket_capacity_mask << 1) + 1;
+
+    if (i < 29) {
+      bucket_capacity_count <<= 1;
+    }
+
     i++;
   }
 
