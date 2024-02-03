@@ -7,8 +7,8 @@ uint32_t entro_hash(const char *input, uint32_t entropy) {
     entropy += input[i];
     entropy += (entropy + 111111111) << 9;
     entropy += entropy << 5;
-    entropy += (entropy + (entropy << 3)) << 24;
-    entropy ^= (entropy >> 16);
+    entropy += ((entropy << 3) + entropy) << 24;
+    entropy ^= entropy >> 16;
     i++;
   }
 
