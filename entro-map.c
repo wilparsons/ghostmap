@@ -516,9 +516,9 @@ void entro_map_remove(const char *key, struct entro_map_s *entro_map) {
 }
 
 void entro_map_destroy(struct entro_map_s *entro_map) {
-  unsigned long bucket_capacity_count = 16;
+  uint32_t bucket_capacity_count = 16;
   unsigned long i = 0;
-  unsigned long j;
+  uint32_t j;
 
   while (i != entro_map->_buckets_count) {
     j = 0;
