@@ -155,11 +155,11 @@ void entro_map_insert(const char *key, const char *value, struct entro_map_s *en
       ) {
         is_insertable = 1;
       } else {
-        if (maximum_bucket_probes_count != 87) {
+        if (maximum_bucket_probes_count != 84) {
           maximum_bucket_probes_count += 3;
+          bucket_capacity_mask = (bucket_capacity_mask << 1) + 1;
         }
 
-        bucket_capacity_mask = (bucket_capacity_mask << 1) + 1;
         i++;
       }
     }
@@ -316,11 +316,11 @@ char entro_map_find(const char *key, struct entro_map_s *entro_map) {
     }
 
     if (is_found == 0) {
-      if (maximum_bucket_probes_count != 87) {
+      if (maximum_bucket_probes_count != 84) {
         maximum_bucket_probes_count += 3;
+        bucket_capacity_mask = (bucket_capacity_mask << 1) + 1;
       }
 
-      bucket_capacity_mask = (bucket_capacity_mask << 1) + 1;
       i++;
     }
   }
@@ -425,11 +425,11 @@ void entro_map_remove(const char *key, struct entro_map_s *entro_map) {
                       entro_map->values[j][truncated_digest] = entro_map->values[entro_map->_buckets_count - 1][i];
                       j = entro_map->_buckets_count - 1;
                     } else {
-                      if (maximum_bucket_probes_count != 87) {
+                      if (maximum_bucket_probes_count != 84) {
                         maximum_bucket_probes_count += 3;
+                        bucket_capacity_mask = (bucket_capacity_mask << 1) + 1;
                       }
 
-                      bucket_capacity_mask = (bucket_capacity_mask << 1) + 1;
                       j++;
                     }
                   }
@@ -505,11 +505,11 @@ void entro_map_remove(const char *key, struct entro_map_s *entro_map) {
     }
 
     if (is_removed == 0) {
-      if (maximum_bucket_probes_count != 87) {
+      if (maximum_bucket_probes_count != 84) {
         maximum_bucket_probes_count += 3;
+        bucket_capacity_mask = (bucket_capacity_mask << 1) + 1;
       }
 
-      bucket_capacity_mask = (bucket_capacity_mask << 1) + 1;
       i++;
     }
   }
