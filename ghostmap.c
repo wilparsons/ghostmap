@@ -302,7 +302,6 @@ char ghostmap_find(const char *key, struct ghostmap_s *ghostmap) {
         if (key[k] == ghostmap->keys[i][truncated_digest][k]) {
           ghostmap->position[0] = i;
           ghostmap->position[1] = truncated_digest;
-          ghostmap->iterator = 0;
           i = ghostmap->_buckets_count - 1;
           j = maximum_bucket_probes_count;
           is_found = 1;
