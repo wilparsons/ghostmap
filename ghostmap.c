@@ -30,7 +30,6 @@ struct ghostmap_s *ghostmap_initialize() {
       ghostmap->_buckets_count = 1;
       ghostmap->_tombstones_count = 0;
       ghostmap->count = 0;
-      ghostmap->iterator = 0;
     } else {
       _handle_error();
     }
@@ -264,8 +263,6 @@ void ghostmap_insert(const char *key, const char *value, struct ghostmap_s *ghos
       _handle_error();
     }
   }
-
-  ghostmap->iterator = 0;
 }
 
 char ghostmap_find(const char *key, struct ghostmap_s *ghostmap) {
@@ -328,69 +325,6 @@ char ghostmap_find(const char *key, struct ghostmap_s *ghostmap) {
   }
 
   return is_found;
-}
-
-unsigned long ghostmap_iterate_next(struct ghostmap_s *ghostmap) {
-  uint32_t bucket_capacity_count = 16;
-  unsigned long i;
-  uint32_t j;
-
-  if (ghostmap->iterator != 0) {
-    i = 0;
-
-    while (i != ghostmap->position[0]) {
-      bucket_capacity_count <<= 1;
-      i++;
-    }
-
-    i = ghostmap->position[0];
-    j = ghostmap->position[1];
-
-    if (j != bucket_capacity_count) {
-      j++;
-    } else {
-      i++;
-      j = 0;
-    }
-  } else {
-    i = 0;
-    j = 0;
-  }
-
-  if (ghostmap->iterator != ghostmap->count) {
-    while (
-      i != ghostmap->_buckets_count &&
-      ghostmap->iterator != ghostmap->count
-    ) {
-      while (j != bucket_capacity_count) {
-        if (ghostmap->_digests[i][j] > 1) {
-          ghostmap->position[0] = i;
-          ghostmap->position[1] = j;
-          ghostmap->iterator++;
-          i = ghostmap->_buckets_count - 1;
-          j = bucket_capacity_count;
-        } else {
-          j++;
-        }
-      }
-
-      if (i != 28) {
-        bucket_capacity_count <<= 1;
-      }
-
-      i++;
-      j = 0;
-    }
-  } else {
-    ghostmap->iterator++;
-  }
-
-  return ghostmap->iterator;
-}
-
-unsigned long ghostmap_iterate_previous(struct ghostmap_s *ghostmap) {
-  // ..
-  return 0;
 }
 
 void ghostmap_remove(const char *key, struct ghostmap_s *ghostmap) {
@@ -576,8 +510,6 @@ void ghostmap_remove(const char *key, struct ghostmap_s *ghostmap) {
 
     i++;
   }
-
-  ghostmap->iterator = 0;
 }
 
 void ghostmap_destroy(struct ghostmap_s *ghostmap) {
