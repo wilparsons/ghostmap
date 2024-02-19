@@ -6,7 +6,7 @@ int main(void) {
 
   ghostmap_insert("key", "value", ghostmap);
 
-  if (ghostmap_find("key", ghostmap) == 1) {
+  if (ghostmap_find("key", ghostmap) == true) {
     printf("%s: %s\n", ghostmap->keys[ghostmap->position[0]][ghostmap->position[1]], ghostmap->values[ghostmap->position[0]][ghostmap->position[1]]);
   }
 

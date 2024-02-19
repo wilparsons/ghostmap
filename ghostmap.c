@@ -51,8 +51,8 @@ void ghostmap_insert(const char *key, const char *value, struct ghostmap_s *ghos
   unsigned long i;
   unsigned long j;
   unsigned long k;
-  char is_insertable = 0;
-  char is_duplicate = 0;
+  bool is_insertable = false;
+  bool is_duplicate = false;
 
   while (digest < 2) {
     digest++;
@@ -61,7 +61,7 @@ void ghostmap_insert(const char *key, const char *value, struct ghostmap_s *ghos
   i = 0;
 
   while (
-    is_insertable == 0 &&
+    is_insertable == false &&
     i != ghostmap->_buckets_count
   ) {
     truncated_digest = digest & bucket_capacity_mask;
@@ -83,7 +83,7 @@ void ghostmap_insert(const char *key, const char *value, struct ghostmap_s *ghos
 
         is_duplicate = key[k] == ghostmap->keys[i][truncated_digest][k];
 
-        if (is_duplicate == 1) {
+        if (is_duplicate == true) {
           k = 0;
 
           while (
@@ -148,12 +148,12 @@ void ghostmap_insert(const char *key, const char *value, struct ghostmap_s *ghos
       }
     }
 
-    if (is_duplicate == 0) {
+    if (is_duplicate == false) {
       if (
         j != maximum_bucket_probes_count &&
         ghostmap->_digests[i][truncated_digest] == 0
       ) {
-        is_insertable = 1;
+        is_insertable = true;
       } else {
         if (maximum_bucket_probes_count != 84) {
           maximum_bucket_probes_count += 3;
@@ -165,8 +165,8 @@ void ghostmap_insert(const char *key, const char *value, struct ghostmap_s *ghos
     }
   }
 
-  if (is_duplicate == 0) {
-    if (is_insertable == 0) {
+  if (is_duplicate == false) {
+    if (is_insertable == false) {
       copied_digests = calloc(i + 1, sizeof(uint32_t *));
       copied_keys = calloc(i + 1, sizeof(char **));
       copied_values = calloc(i + 1, sizeof(char **));
@@ -265,7 +265,7 @@ void ghostmap_insert(const char *key, const char *value, struct ghostmap_s *ghos
   }
 }
 
-char ghostmap_find(const char *key, struct ghostmap_s *ghostmap) {
+bool ghostmap_find(const char *key, struct ghostmap_s *ghostmap) {
   uint32_t digest = quakehash(key, 1111111111);
   uint32_t truncated_digest;
   unsigned char maximum_bucket_probes_count = 3;
@@ -273,7 +273,7 @@ char ghostmap_find(const char *key, struct ghostmap_s *ghostmap) {
   unsigned long i;
   unsigned char j;
   unsigned long k;
-  char is_found = 0;
+  bool is_found = false;
 
   while (digest < 2) {
     digest++;
@@ -304,7 +304,7 @@ char ghostmap_find(const char *key, struct ghostmap_s *ghostmap) {
           ghostmap->position[1] = truncated_digest;
           i = ghostmap->_buckets_count - 1;
           j = maximum_bucket_probes_count;
-          is_found = 1;
+          is_found = true;
         } else {
           truncated_digest = (truncated_digest + 1) & bucket_capacity_mask;
           j++;
@@ -337,8 +337,8 @@ void ghostmap_remove(const char *key, struct ghostmap_s *ghostmap) {
   unsigned long i;
   unsigned long j;
   unsigned long k;
-  char is_removed = 0;
-  char is_shrinkable;
+  bool is_removed = false;
+  bool is_shrinkable;
 
   while (digest < 2) {
     digest++;
@@ -376,13 +376,13 @@ void ghostmap_remove(const char *key, struct ghostmap_s *ghostmap) {
             ghostmap->_tombstones_count++;
           }
 
-          is_removed = 1;
+          is_removed = true;
 
           if (
             ghostmap->_buckets_count != 1 &&
             ((ghostmap->_end_bucket_count >> 1) + ghostmap->_end_bucket_count) < ghostmap->_tombstones_count
           ) {
-            is_shrinkable = 1;
+            is_shrinkable = true;
 
             if (ghostmap->_end_bucket_count != 0) {
               i = ghostmap->_end_bucket_capacity_count;
@@ -435,12 +435,12 @@ void ghostmap_remove(const char *key, struct ghostmap_s *ghostmap) {
 
                 if (ghostmap->_digests[ghostmap->_buckets_count - 1][i] > 1) {
                   i = 0;
-                  is_shrinkable = 0;
+                  is_shrinkable = false;
                 }
               }
             }
 
-            if (is_shrinkable == 1) {
+            if (is_shrinkable == true) {
               copied_digests = calloc(ghostmap->_buckets_count - 1, sizeof(uint32_t *));
               copied_keys = calloc(ghostmap->_buckets_count - 1, sizeof(char **));
               copied_values = calloc(ghostmap->_buckets_count - 1, sizeof(char **));

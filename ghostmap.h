@@ -1,6 +1,7 @@
 #ifndef GHOSTMAP_H
 #define GHOSTMAP_H
 
+#include <stdbool.h>
 #include <stdint.h>
 #include <stdlib.h>
 
@@ -18,7 +19,7 @@ struct ghostmap_s {
 
 struct ghostmap_s *ghostmap_initialize();
 void ghostmap_insert(const char *key, const char *value, struct ghostmap_s *ghostmap);
-char ghostmap_find(const char *key, struct ghostmap_s *ghostmap);
+bool ghostmap_find(const char *key, struct ghostmap_s *ghostmap);
 void ghostmap_remove(const char *key, struct ghostmap_s *ghostmap);
 void ghostmap_destroy(struct ghostmap_s *ghostmap);
 #endif
