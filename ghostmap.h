@@ -14,11 +14,14 @@ struct ghostmap_s {
   char ***values;
   unsigned long position[2];
   unsigned long count;
+  unsigned long iterator;
 };
 
 struct ghostmap_s *ghostmap_initialize();
 void ghostmap_insert(const char *key, const char *value, struct ghostmap_s *ghostmap);
 char ghostmap_find(const char *key, struct ghostmap_s *ghostmap);
+unsigned long ghostmap_iterate_next(struct ghostmap_s *ghostmap);
+unsigned long ghostmap_iterate_previous(struct ghostmap_s *ghostmap);
 void ghostmap_remove(const char *key, struct ghostmap_s *ghostmap);
 void ghostmap_destroy(struct ghostmap_s *ghostmap);
 #endif
