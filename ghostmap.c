@@ -1,5 +1,5 @@
-#include "quakehash.h"
 #include "ghostmap.h"
+#include "quakehash.h"
 
 void _handle_error() {
   exit(EXIT_FAILURE);
@@ -137,7 +137,7 @@ void ghostmap_insert(const char *key, const char *value, struct ghostmap_s *ghos
           }
 
           j = maximum_bucket_probes_count;
-          is_insertable = 1;
+          is_insertable = true;
         } else {
           truncated_digest = (truncated_digest + 1) & bucket_capacity_mask;
           j++;
