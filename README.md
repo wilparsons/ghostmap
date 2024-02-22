@@ -82,6 +82,6 @@ The return value data type is `void`.
 It frees dynamically-allocated heap memory for all entries recursively.
 
 ## Support
-GhostMap was designed and developed by [Wil Parsons](https://wilparsons.com/).
+GhostMap was designed and developed by [Wil Parsons](https://wilparsons.github.io).
 
 I'm available for freelance work to extend, implement or modify GhostMap and other algorithms.
