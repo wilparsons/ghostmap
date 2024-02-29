@@ -1,5 +1,5 @@
 # GhostMap
-![GhostMap Logo](https://repository-images.githubusercontent.com/751117710/42df0a45-392f-4739-ac95-8caee5d96418)
+![GhostMap Logo](https://repository-images.githubusercontent.com/751117710/bfd255a1-2bd8-4c55-92ce-fb247accf5a8)
 
 ## Description
 GhostMap is an open-addressed, unordered hash table.
