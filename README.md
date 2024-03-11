@@ -31,7 +31,7 @@ int main(void) {
 #### `ghostmap_initialize()`
 This is the initialization function.
 
-The return value data type is `struct ghostmap_s`.
+The return value data type is `struct ghostmap_s *`.
 
 It returns a pointer to a `struct` instance containing counts and entries with initialized heap memory.
 
