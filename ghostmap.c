@@ -94,10 +94,7 @@ void ghostmap_insert(const char *key, const char *value, struct ghostmap_s *ghos
             k++;
           }
 
-          if (
-            value[k] != 0 ||
-            ghostmap->values[i][truncated_digest][k] != 0
-          ) {
+          if ((value[k] | ghostmap->values[i][truncated_digest][k]) != 0) {
             while (
               value[k] != 0 &&
               ghostmap->values[i][truncated_digest][k] != 0
@@ -105,10 +102,7 @@ void ghostmap_insert(const char *key, const char *value, struct ghostmap_s *ghos
               k++;
             }
 
-            if (
-              value[k] == 0 &&
-              ghostmap->values[i][truncated_digest][k] == 0
-            ) {
+            if ((value[k] | ghostmap->values[i][truncated_digest][k]) == 0) {
               k++;
 
               while (k != 0) {
