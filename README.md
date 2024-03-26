@@ -4,7 +4,7 @@
 ## Description
 GhostMap is an open-addressed, unordered hash table.
 
-Read [this article](https://medium.com/@wilparsons/ghostmap-is-a-new-unordered-hash-table-with-a-high-average-load-factor-and-low-overhead-c360ee0acb4b) for an in-depth explanation.
+Read [this article](https://medium.com/@williamstaffordparsons/ghostmap-is-a-new-unordered-hash-table-with-a-high-average-load-factor-and-low-overhead-c360ee0acb4b) for an in-depth explanation.
 
 ## License
 GhostMap is subject to the software licensing terms from the [LICENSE file](https://github.com/williamstaffordparsons/ghostmap/blob/master/LICENSE).
